@@ -1,0 +1,20 @@
+李明
+求职方向：Python 后端开发工程师
+
+教育经历
+华东示例大学，计算机科学与技术，本科，2018—2022
+
+工作经历
+某科技有限公司，Python 后端开发工程师，2022—至今
+拥有 3 年 Python 后端开发经验，负责业务接口、数据处理和服务部署。
+
+项目经历
+智能客服知识库系统
+- 使用 Python 和 FastAPI 开发 RESTful API。
+- 使用 PostgreSQL 保存业务数据，Redis 实现热点数据缓存。
+- 使用 Docker 完成开发环境和测试环境部署。
+- 使用 Git 进行版本管理，并编写 pytest 自动化测试。
+- 接入大语言模型和 RAG 检索流程，降低无依据回答比例。
+
+专业技能
+Python、FastAPI、PostgreSQL、Redis、Docker、Git、Linux、REST API、RAG、pytest

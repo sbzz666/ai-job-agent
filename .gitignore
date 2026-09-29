@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.test-run-*/
+.ruff_cache/
+.venv/
+venv/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+job-agent/.streamlit/secrets.toml
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Other workspace projects are not part of this repository
+/english-tutor-agent/
+/knowledge-agent/
+
+# Private source documents and generated runtime data
+job-agent/data/private/
+job-agent/data/uploads/
+job-agent/data/*.db
+knowledge-agent/data/private/
+knowledge-agent/data/uploads/
+knowledge-agent/data/*.db
+*.sqlite
+*.sqlite3
