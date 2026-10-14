@@ -41,7 +41,14 @@ jobs:
       - name: Install Inno Setup
         run: choco install innosetup -y --no-progress
       - name: Build installer
-        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packaging\windows\installer.iss'
+        shell: powershell
+        run: |
+          $version = if ($env:GITHUB_REF_TYPE -eq "tag") {
+            $env:GITHUB_REF_NAME -replace '^v', ''
+          } else {
+            "0.0.0-dev"
+          }
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DAppVersion=$version" packaging\windows\installer.iss
       - uses: actions/upload-artifact@v4
         with:
           name: ai-job-assistant-windows

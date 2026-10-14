@@ -1,5 +1,7 @@
 #define AppName "AI Job Assistant"
-#define AppVersion "0.1.0"
+#ifndef AppVersion
+  #define AppVersion "0.0.0-dev"
+#endif
 #define AppExe "AIJobAssistant.exe"
 
 [Setup]
