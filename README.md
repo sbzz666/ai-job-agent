@@ -17,6 +17,12 @@
 
 Python 3.11+、Streamlit、FastAPI、OpenAI Python SDK / Responses API、DeepSeek、Pydantic、SQLite、PyMuPDF、python-docx、pytest。
 
+## Windows 桌面版
+
+GitHub Releases 提供 `Setup.exe` 安装版和 `Portable.zip` 便携版。便携版解压后运行 `AIJobAssistant.exe`，不需要另装 Python。用户数据保存在 Windows 的本地应用数据目录，不会写入安装目录。
+
+安装包不包含任何 API 密钥。没有配置 DeepSeek 密钥时，软件仍可使用本地岗位匹配功能。发布维护者推送 `v*` 标签后，GitHub Actions 会自动构建并发布两个安装产物。
+
 ## 数据流
 
 ```text

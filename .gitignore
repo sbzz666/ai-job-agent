@@ -34,3 +34,7 @@ knowledge-agent/data/uploads/
 knowledge-agent/data/*.db
 *.sqlite
 *.sqlite3
+**/build/
+**/dist/
+**/release/
+*.spec
