@@ -15,6 +15,12 @@ from app.services.deepseek_service import (
     DeepSeekServiceError,
     deepseek_is_configured,
 )
+from app.services.credential_store import (
+    CredentialStoreError,
+    delete_deepseek_config,
+    load_deepseek_config,
+    save_deepseek_config,
+)
 from app.services.resume_parser import ResumeParseError, parse_resume
 from app.services.rate_limiter import RateLimitExceeded, RateLimiter
 from app.services.task_repository import TransientTaskRepository
@@ -49,6 +55,15 @@ for secret_name in ("DEEPSEEK_API_KEY", "DEEPSEEK_MODEL", "DEEPSEEK_BASE_URL"):
     secret_value = _setting(secret_name)
     if secret_value and not os.getenv(secret_name):
         os.environ[secret_name] = secret_value
+
+if not os.getenv("DEEPSEEK_API_KEY"):
+    try:
+        stored_deepseek_config = load_deepseek_config()
+    except CredentialStoreError:
+        stored_deepseek_config = None
+    if stored_deepseek_config:
+        os.environ["DEEPSEEK_API_KEY"] = stored_deepseek_config.api_key
+        os.environ["DEEPSEEK_MODEL"] = stored_deepseek_config.model
 
 
 if _enabled("REQUIRE_LOGIN"):
@@ -299,6 +314,42 @@ with st.sidebar:
         '<div class="privacy-note">🔒 简历文件仅临时解析，不持久化整份正文；发送 DeepSeek 前会隐藏手机号、邮箱和微信号。</div>',
         unsafe_allow_html=True,
     )
+    st.divider()
+    with st.expander("DeepSeek API 设置", expanded=not deepseek_is_configured()):
+        st.caption("密钥使用 Windows DPAPI 加密，仅当前 Windows 账户可读取。")
+        deepseek_key = st.text_input(
+            "API Key",
+            type="password",
+            placeholder="sk-...",
+            help="密钥不会上传到 GitHub，也不会显示在日志中。",
+        )
+        model_options = ("deepseek-flash", "deepseek-chat", "deepseek-reasoner")
+        configured_model = os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
+        deepseek_model = st.selectbox(
+            "模型",
+            model_options,
+            index=model_options.index(configured_model) if configured_model in model_options else 0,
+        )
+        save_col, delete_col = st.columns(2)
+        if save_col.button("保存配置", use_container_width=True):
+            try:
+                save_deepseek_config(deepseek_key, deepseek_model)
+                os.environ["DEEPSEEK_API_KEY"] = deepseek_key.strip()
+                os.environ["DEEPSEEK_MODEL"] = deepseek_model
+                st.success("已安全保存。")
+                st.rerun()
+            except CredentialStoreError as exc:
+                st.error(str(exc))
+        if delete_col.button("删除配置", use_container_width=True):
+            delete_deepseek_config()
+            os.environ.pop("DEEPSEEK_API_KEY", None)
+            os.environ.pop("DEEPSEEK_MODEL", None)
+            st.success("本机配置已删除。")
+            st.rerun()
+        if deepseek_is_configured():
+            st.success("已配置 DeepSeek API Key")
+        else:
+            st.info("尚未配置，AI 增强功能不可用。")
     st.divider()
     if st.button("清除本次会话数据", use_container_width=True):
         for key in ("last_report", "resume_text", "job_description", "qa_messages", "ai_guidance", "session_history"):

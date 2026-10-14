@@ -32,6 +32,10 @@ $env:DEEPSEEK_API_KEY="你的密钥"
 $env:DEEPSEEK_MODEL="deepseek-flash"
 ```
 
+Windows 桌面版也可以直接展开左侧的“DeepSeek API 设置”，填写自己的 API Key
+并选择模型。密钥由 Windows DPAPI 加密后保存在当前用户的本机目录中，不会写入
+安装包、代码仓库或应用日志；可随时在同一设置区域删除。
+
 页面只有在用户勾选授权后，才会把脱敏简历文本和 JD 发送给 DeepSeek。
 
 命令行默认只输出摘要；添加 `--show-text` 才会显示简历正文，避免终端日志意外泄露隐私。
